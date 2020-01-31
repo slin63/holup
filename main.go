@@ -31,18 +31,12 @@ func main() {
 	}
 	if pid != "" {
 		go releaseOnLeave(pid)
-		log.Println(pid)
-		info, err := exec.Command("ps", "-p", pid).Output()
+		err := exec.Command("kill", "-TSTP", pid).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		err = exec.Command("kill", "-TSTP", pid).Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		log.Printf("PID suspended: [%s]\nInfo:\n%s\n", pid, info)
+		log.Printf("PID suspended: [%s]\n", pid)
 		<-hold
 	}
 
